@@ -19,10 +19,15 @@ jobs:
 
       - name: Deploy via Git Pull
         run: |
-          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            cd /var/www/html/ci-cd-with-html
-            if [ -d .git ]; then
+            ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            cd /var/www/html
+            if [ ! -d .git ]; then
+              git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/kavish28081997/ci-cd-with-html.git
+            else
+              cd ci-cd-with-html
               git pull origin main
             fi
-          EOF
+            EOF
+
+
 
