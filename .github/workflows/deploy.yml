@@ -17,7 +17,7 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy via Git Pull
+      - name: Deploy via Git Pull 
         run: |
           ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
             cd /var/www/html
@@ -27,3 +27,4 @@ jobs:
               git pull origin main
             fi
           EOF
+
