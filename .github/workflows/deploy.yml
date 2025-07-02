@@ -10,9 +10,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
@@ -20,15 +17,13 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Copy files to EC2
-        run: |
-          scp -r ./index.html ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/tmp/site
-
-      - name: Deploy to NGINX root
+      - name: Deploy via Git Pull
         run: |
           ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-            sudo mkdir -p /var/www/html
-            sudo cp -r /tmp/site/* /var/www/html/
-            sudo systemctl restart nginx
+            cd /var/www/html
+            if [ ! -d .git ]; then
+              git clone https://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@github.com/kavish28081997/ci-cd-with-html.git .
+            else
+              git pull origin main
+            fi
           EOF
-
