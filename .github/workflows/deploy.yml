@@ -17,17 +17,22 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy via Git Pull
+      - name: Deploy via Git Pull (HTTPS)
         run: |
-            ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << EOF
+            set -e
             cd /var/www/html
-            if [ ! -d .git ]; then
-              git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/kavish28081997/ci-cd-with-html.git
+
+            # Clone repo if not exists
+            if [ ! -d "ci-cd-with-html" ]; then
+              git clone https://${{ secrets.MY_TOKEN }}@github.com/kavish28081997/ci-cd-with-html.git
             else
               cd ci-cd-with-html
-              git pull origin main
+              git pull
             fi
-            EOF
+          EOF
+
+          
 
 
 
