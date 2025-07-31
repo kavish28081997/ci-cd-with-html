@@ -27,7 +27,7 @@ jobs:
 
             # Clone repo if not exists
             if [ ! -d "ci-cd-with-html" ]; then
-              git clone https://${{ secrets.MY_TOKEN }}@github.com/kavish28081997/ci-cd-with-html.git
+              git clone https://github.com/kavish28081997/ci-cd-with-html.git
             else
               cd ci-cd-with-html
               git pull
